@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.board">
+	<!-- 상세보기 쿼리 -->
+	<select id="select" resultType="com.spring.board.domain.BoardVO">
+		SELECT * FROM board WHERE bNum = #{bNum}
+	</select>
+	<!-- 상세보기 쿼리 -->
+	
+	<!-- 게시글 목록 -->
+	<select id="list" resultType="com.spring.board.domain.BoardVO" parameterType="map">
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} ORDER BY reRef DESC, reSeq ASC offset #{page} limit 15
+	</select>
+	<!-- 게시글 목록 -->
+	
+	<!-- 제일큰 글번호 뽑기  -->
+	<select id="reRef" resultType="int">
+		SELECT max(bNum) FROM board 
+	</select>
+	<!-- 제일큰 글번호 뽑기 -->
+	
+	<!-- 게시글 입력 쿼리  -->
+	<insert id="insert">
+      INSERT INTO board(bigcategory, category, bTitle, bContent, bReadCount, password, fileName, reRef, reLev, reSeq, recommend, report, notice, bWriteDate,userEmail)
+      VALUES(#{bigcategory},#{category}, #{bTitle}, #{bContent}, #{bReadCount}, #{password}, #{fileName}, #{reRef}, #{reLev}, #{reSeq}, #{recommend}, #{report}, #{notice}, now(),#{userEmail}) 
+   </insert>
+	<!-- 게시글 입력 쿼리  -->
+	
+	<!-- 게시글 수정 쿼리 -->
+	<update id="update">
+		UPDATE board SET bTitle = #{bTitle}, bContent=#{bContent} WHERE bNum = #{bNum}
+	</update>
+	<!-- 게시글 수정 쿼리 -->
+	
+	<!-- 그룹내 답글 순서 재배치 -->
+	<update id="seqUp">
+		UPDATE board SET reSeq = reSeq+1 WHERE reRef = #{reRef} and reSeq > #{reSeq}
+	</update>
+	<!-- 그룹내 답글 순서 재배치 -->
+	
+	<!-- 조회수 증가 쿼리 -->
+	<update id="updateReadCount">
+		UPDATE board SET bReadCount = bReadCount + 1 WHERE bNum = #{bNum}
+	</update>
+	<!-- 조회수 증가 쿼리 -->
+	
+	<!-- 게시글 삭제 쿼리 -->
+	<delete id="delete">
+		DELETE FROM board WHERE bNum = #{bNum}
+	</delete>
+	<!-- 게시글 삭제 쿼리 -->
+	
+	<!-- 총 게시글 갯수 쿼리  -->	
+	<select id="allCount"  resultType="int" parameterType="map">
+		SELECT count(*) FROM board WHERE bigcategory=#{bigcategory} and category =#{category}
+	</select>
+	<!-- 총 게시글 갯수 쿼리  -->
+	
+	<!-- 검색 쿼리 -->
+	
+	<select id="searchAll" resultType="com.spring.board.domain.BoardVO" parameterType="map">
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and (bTitle LIKE CONCAT('%',#{keyword},'%') or bContent LIKE CONCAT('%',#{keyword},'%')) ORDER BY bNum DESC offset #{page} limit 15
+	</select>
+	
+	<select id="searchTitle" resultType="com.spring.board.domain.BoardVO" parameterType="map">
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bTitle LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC  offset #{page} limit 15
+	</select>
+	
+	<select id="searchContent" resultType="com.spring.board.domain.BoardVO" parameterType="map">
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bContent LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC  offset #{page} limit 15
+	</select>
+	
+	<select id="searchWritert" resultType="com.spring.board.domain.BoardVO" parameterType="map">
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and userEmail LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC  offset #{page} limit 15
+	</select>
+	
+	<select id="searchAllCount" resultType="int" parameterType="map">
+		SELECT count(*) FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and (bTitle LIKE CONCAT('%',#{keyword},'%') or bContent LIKE CONCAT('%',#{keyword},'%')) ORDER BY bNum DESC
+	</select>
+	
+	<select id="searchTitleCount" resultType="int" parameterType="map">
+		SELECT count(*) FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bTitle LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC
+	</select>
+	
+	<select id="searchContentCount" resultType="int" parameterType="map">
+		SELECT count(*) FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bContent LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC
+	</select>
+	
+	<select id="searchWritertCount" resultType="int" parameterType="map">
+		SELECT count(*) FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and userEmail LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC
+	</select>
+	
+	<!-- 검색 쿼리 -->
+	
+	<!-- 신고 쿼리 -->
+	<insert id="report">
+		INSERT INTO boardupdown (bNum, userEmail, report,bTitle,uri) VALUES (#{bNum}, #{userEmail}, #{report},#{bTitle},#{uri}) 
+	</insert>
+	<!-- 추천 쿼리 -->
+	<insert id="recommend">
+		INSERT INTO boardupdown (bNum, userEmail, recommend) VALUES (#{bNum}, #{userEmail}, #{recommend}) 
+	</insert>
+	
+	<select id="reportCheck" resultType="int">
+		SELECT count(*) FROM boardupdown WHERE bNum=#{bNum} and userEmail=#{userEmail} and report=1
+	</select>
+	
+	<select id="recommendCheck" resultType="int">
+		SELECT count(*) FROM boardupdown WHERE bNum=#{bNum} and userEmail=#{userEmail} and recommend=1
+	</select>
+	
+	<update id="updateReport">
+		UPDATE board SET report = #{report} WHERE bNum = #{bNum}
+	</update>
+	
+	<update id="updateRecommend">
+		UPDATE board SET Recommend = #{recommend} WHERE bNum = #{bNum}
+	</update>
+	
+	<!-- 신고 있는글 검색  -->
+		<select id="reportboard" resultType="com.spring.board.domain.ReportVO">
+			SELECT bNum,userEmail,recommend,count(*) report,uri,bTitle,ok FROM boardupdown WHERE report > 0 GROUP BY bNum;
+		</select>
+	<!-- 신고 있는글 검색  -->
+	
+	<!-- 확인 유무 -->
+		<update id="ok">
+			UPDATE boardupdown SET ok = 1 WHERE bNum = #{bNum} and report > 0; 
+		</update>
+	<!-- 확인 유무 -->
+	
+	<!-- 신고글 상세 보기 -->
+		<select id="reportdetail" resultType="com.spring.board.domain.ReportVO">
+			SELECT bNum,userEmail,recommend,count(*) report,uri,bTitle,ok FROM boardupdown WHERE report > 0 GROUP BY bNum HAVING bNum=#{bNum};
+		</select>
+	<!-- 신고글 상세 보기 -->
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,66 @@
+@charset "UTF-8";
+.box {
+	border: 1px solid #D8D8D8;
+	border-radius: 3px;
+	padding: 10px 5px 5px 45px;
+	margin: auto;
+	width: 700px;
+	height: 1550px;
+}
+
+.join {
+	width: 300px;
+	height: 100px;
+	margin: auto;
+}
+.box2 {
+	border: 1px solid #D8D8D8;
+	padding: 10px 5px 5px 45px;
+	margin: auto;
+	width: 500px;
+	height: 670px;
+	border-radius: 3px;
+}
+
+.main {
+	margin-left: 7%;
+}
+.bigBlueButton{
+	margin: 5px;
+	width: 300px;
+	height: 60px;
+	text-align:center;
+	background-color: #1A70DC; 
+	font-weight: bold;
+	font-size: 20px;
+	color: white;
+	box-shadow: 0px 4px 20px -8px black;
+}
+.bigWhiteButton{
+	width: 380px;
+	height: 65px;
+	margin: 2px 2px 2px 0px;
+	text-align: center;
+	border: 1px solid #1A70DC; 
+	background-color: white;
+	font-weight: bold;
+	color: #1A70DC;
+	box-shadow: 0px 4px 20px -8px black;
+}
+.joinForm-btn{
+	margin-left: 5px;
+	padding: 5px;
+	width: 80px;
+	height: 30px;
+	font-size: 14px;
+}
+.join-btn{
+	margin: 30px;
+	padding: auto;
+	border:none;
+}
+.login-btn{
+	width: 380px;
+	height: 65px;
+	border: none;
+}

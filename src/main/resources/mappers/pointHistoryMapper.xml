@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.pointHistory">
+	<insert id="insert">
+		INSERT INTO pointHistory (userEmail, itemType, point, reg_date) VALUES(#{userEmail}, #{itemType}, #{point}, now()) 
+	</insert>
+
+	<select id="list" resultType="com.spring.board.domain.PointHistoryVO">
+		SELECT * FROM pointHistory WHERE userEmail = #{userEmail} ORDER BY num DESC offset #{startNum} limit 15
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM pointHistory WHERE num = #{num}
+	</delete>
+
+</mapper>

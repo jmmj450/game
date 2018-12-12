@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.user">
+	<insert id="insert">
+		INSERT INTO member (userEmail, userPassword, userName, userPhone, userAddr, userPoint, userLevel, userLoginCount, userDate, userAdmin) VALUES(#{userEmail}, #{userPassword}, #{userName}, #{userPhone}, #{userAddr}, 0, 1, 0, now(), 0) 
+	</insert>
+	
+	<delete id="delete">
+		DELETE FROM member WHERE userID = #{userID}
+	</delete>
+	
+	<update id="changeValidate">
+		update member set userValidate = #{userValidate} WHERE userID = #{userID}
+	</update>	
+	
+	<select id="loginCheck" resultType="int">
+		SELECT count(*) FROM member WHERE userEmail = #{userEmail} and userPassword = #{userPassword} 
+	</select>
+
+	<select id="select" resultType="com.spring.board.domain.UserVO">
+		SELECT * FROM member WHERE userEmail = #{userEmail}
+	</select>
+	
+	<select id="selectByID" resultType="com.spring.board.domain.UserVO">
+		SELECT * FROM member WHERE userID = #{userID}
+	</select>
+
+	<select id="findId" resultType="String">
+		SELECT userEmail FROM member WHERE userName = #{userName} and userPhone = #{userPhone} 
+	</select>
+
+	<update id="findPwd">
+		update member set userPassword = #{userPassword} WHERE userEmail = #{userEmail} and userName = #{userName}
+	</update>	
+	
+	<update id="update">
+		update member set userPassword = #{userPassword}, userName = #{userName}, userAddr = #{userAddr}  where userEmail = #{userEmail}
+	</update>
+	<update id="updateAdmin">
+		update member set userPassword = #{userPassword}, userName = #{userName}, userAddr = #{userAddr}, userPoint = #{userPoint}, userLevel = #{userLevel}, userLoginCount = #{userLoginCount}, userAdmin = #{userAdmin}  where userEmail = #{userEmail}
+	</update>
+	<update id="updatePointLevelLoginCount">
+		update member set userPassword = #{userPassword}, userName = #{userName}, userAddr = #{userAddr}, userPoint = #{userPoint}, userLevel = #{userLevel}, userLoginCount = #{userLoginCount}, userAdmin = #{userAdmin}  where userEmail = #{userEmail}
+	</update>
+	
+	<select id="chkDupId" resultType="int">
+		SELECT count(*) FROM member WHERE userEmail = #{userEmail}
+	</select>
+	
+	<update id="updatePoint">
+		update member set userPoint = userPoint + #{userPoint} where userEmail = #{userEmail}
+	</update>
+
+	<select id="list" resultType="com.spring.board.domain.UserVO">
+		SELECT * FROM member ORDER BY userID DESC offset #{startNum} limit 15
+	</select>
+
+    <!-- 
+        로그인된 경우 해당 세션id와 유효시간을 사용자 테이블에 세팅한다.
+     -->
+    <update id="keepLogin">
+        update member set sessionKey = #{sessionId}, sessionLimit = #{next} where userEmail=#{userEmail}
+    </update>
+     
+    <!-- 
+        유효기간이 남아 있으면서 해당 sessionId를 가지는 사용자 정보를 꺼내오는 부분
+     -->
+    <select id="checkUserWithSessionKey" resultType="com.spring.board.domain.UserVO">
+        select * from member where sessionKey = #{sessionId} and sessionLimit > now()
+    </select>
+
+    <select id="userAdmin" resultType="int">
+		SELECT userAdmin FROM member WHERE userEmail = #{userEmail}
+	</select>
+	
+</mapper>

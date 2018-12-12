@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.product">
+	
+	<!-- 상품 전체 목록 -->
+	<select id="list" resultType="com.spring.board.domain.ProductVO">
+		SELECT * FROM product ORDER BY proTime desc 
+	</select>
+	
+	<!-- 상품 상세보기 -->
+	<select id="detail" resultType="com.spring.board.domain.ProductVO">
+		SELECT * FROM product WHERE proNum = #{proNum}
+	</select>
+
+	<!-- 관리자 로그인 -->
+	<select id="loginCheck" resultType="String">
+		SELECT userEmail FROM user WHERE userName = #{userEmail}
+									 AND userPassword
+	</select>	
+	
+	<!-- 상품 추가하기 -->
+	<insert id="insert">
+		INSERT INTO product(proName, proPrice, proContent, proFile, proTime) VALUES(#{proName}, #{proPrice}, #{proContent}, #{proFile}, now())
+	</insert>
+	
+	<!-- 상품레코드 삭제 -->
+	<delete id="delete">
+		DELETE FROM product WHERE proNum = #{proNum}
+	</delete>
+	
+	<!-- 상품 수정 -->
+	<update id="update">
+		UPDATE product SET proName = #{proName}, proPrice=#{proPrice}, proContent=#{proContent}, proFile=#{proFile} WHERE proNum = #{proNum}
+	</update> 
+	
+	<!-- 삭제를 위한 상품 이미지 파일 가져오기 -->
+	<select id="fileInfo" resultType="String">
+		SELECT proFile FROM product WHERE proNum = #{proNum}
+	</select>	
+	
+</mapper>
