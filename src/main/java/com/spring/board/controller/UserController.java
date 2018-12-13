@@ -149,7 +149,7 @@ public class UserController {
 					// 쿠키를 생성하고 현재 로그인되어 있을 때 생성되었던 세션의 id를 쿠키에 저장한다.
 					// Cookie cookie = new Cookie("loginCookie", session.getId());
 					Cookie cookie1 = new Cookie("userEmail", userVO.getUserEmail());
-					Cookie cookie2 = new Cookie("userAdmin", userVO.getUserAdmin());
+					Cookie cookie2 = new Cookie("userAdmin", userVO.getUserAdmin() + "");
 					// 쿠키를 찾을 경로를 컨텍스트 경로로 변경해 주고...
 					cookie1.setPath("/");
 					cookie2.setPath("/");

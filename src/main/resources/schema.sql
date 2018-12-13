@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS member (
   userLoginCount integer DEFAULT '0',
   userDate timestamp DEFAULT NULL,
   userValidate integer DEFAULT '1',
-  userAdmin integer DEFAULT '0',
+  userAdmin varchar(20) DEFAULT '0',
   sessionkey varchar(50) NOT NULL DEFAULT 'none',
   sessionlimit timestamp
 );
