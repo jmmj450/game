@@ -23,7 +23,7 @@
 
 	<select id="selectMyLevel" resultType="com.spring.board.domain.LevelVO">
 		<![CDATA[
-			SELECT * FROM levels WHERE point <= #{point} ORDER BY point DESC limit 1
+			SELECT * FROM levels WHERE point <= #{point} ORDER BY point DESC offset 0 limit 1
 		]]>
 	</select>
 	

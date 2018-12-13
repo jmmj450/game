@@ -12,7 +12,7 @@
 	
 	<!-- 게시글 목록 -->
 	<select id="list" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} ORDER BY notice DESC, reRef DESC, reSeq ASC limit #{page}, 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} ORDER BY notice DESC, reRef DESC, reSeq ASC offset #{page} limit 15
 	</select>
 	<!-- 게시글 목록 -->
 	
@@ -62,19 +62,19 @@
 	<!-- 검색 쿼리 -->
 	
 	<select id="searchAll" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and (bTitle LIKE CONCAT('%',#{keyword},'%') or bContent LIKE CONCAT('%',#{keyword},'%')) ORDER BY bNum DESC limit #{page}, 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and (bTitle LIKE CONCAT('%',#{keyword},'%') or bContent LIKE CONCAT('%',#{keyword},'%')) ORDER BY bNum DESC offset #{page} limit 15
 	</select>
 	
 	<select id="searchTitle" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bTitle LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC limit #{page}, 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bTitle LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC offset #{page} limit 15
 	</select>
 	
 	<select id="searchContent" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bContent LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC limit #{page}, 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bContent LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC offset #{page} limit 15
 	</select>
 	
 	<select id="searchWritert" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and userEmail LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC limit #{page}, 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and userEmail LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC offset #{page} limit 15
 	</select>
 	
 	<select id="searchAllCount" resultType="int" parameterType="map">
@@ -140,7 +140,7 @@
 	
 	<!-- 베스트 글 불러오기  -->
 		<select id="boardbest" resultType="com.spring.board.domain.BoardVO">
-			SELECT * FROM board WHERE bigcategory=#{bigcategory} and category=#{category} ORDER BY recommend desc limit 16 ;
+			SELECT * FROM board WHERE bigcategory=#{bigcategory} and category=#{category} ORDER BY recommend desc offset 0 limit 16 ;
 		</select>
 	<!-- 베스트 글 불러오기  -->
 	
