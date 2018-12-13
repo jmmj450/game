@@ -20,7 +20,11 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public void insert(BoardVO board) throws Exception {
-		board.setReRef(boardDAO.maxbNum()+1);
+		Integer maxNum = boardDAO.maxbNum();
+		if (maxNum == null) {
+			maxNum = 0;
+		}
+		board.setReRef(maxNum+1);
 		boardDAO.insert(board);
 	}
 
@@ -127,5 +131,10 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public ReportVO reportdetail(int bNum) throws Exception {
 		return boardDAO.reportdetail(bNum);
+	}
+	
+	@Override
+	public List<BoardVO> boardbest(BoardVO boardVO) throws Exception {
+		return boardDAO.boardbest(boardVO);
 	}
 }

@@ -31,4 +31,8 @@
 		UPDATE levels SET point = #{point}, levels = #{levels} WHERE num = #{num} 
 	</update>
 	
+	<select id="count" resultType="int">
+		SELECT count(*) FROM levels
+	</select>
+	
 </mapper>

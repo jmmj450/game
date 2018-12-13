@@ -9,7 +9,7 @@ import com.spring.board.domain.GBDetailVO;
 import com.spring.board.domain.GBoardVO;
 
 public interface GBoardService {
-	void insert(GBoardVO gboard, HttpServletRequest request,  GBDetailVO gbdetailVO) throws Exception;
+	void insert(GBoardVO gboard, String path, GBDetailVO gbdetailVO) throws Exception;
 	void delete(int bNum) throws Exception;
 	void update(GBoardVO gboard) throws Exception;
 	List<GBoardVO> list(Map<String, Object>info) throws Exception;

@@ -36,5 +36,9 @@ public class ReplyDAOImpl implements ReplyDAO{
 	public int selectMaxRnum() throws Exception {
 		return session.selectOne(namespace+".selectMaxRnum");
 	}
-
+	
+	@Override
+	public int allcount(int bNum) throws Exception {
+		return session.selectOne(namespace+".allCount",bNum);
+	}
 }

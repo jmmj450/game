@@ -20,6 +20,13 @@ import com.spring.board.persistent.UserDAO;
 @Service
 public class UserServiceImpl implements UserService {
 	
+	public UserServiceImpl() {
+	}
+
+	public UserServiceImpl(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+
 	@Autowired
 	private UserDAO userDAO;
 	
@@ -106,7 +113,7 @@ public class UserServiceImpl implements UserService {
 		
 		// 자동등업처리
 		LevelVO levelVO = levelDAO.selectMyLevel(lastPoint);
-		userVO.setUserLevel(levelVO.getLevel());
+		userVO.setUserLevel(levelVO.getLevels());
 
 		// 로그인 카운트 추가
 		userVO.setUserLoginCount(userVO.getUserLoginCount() + 1);

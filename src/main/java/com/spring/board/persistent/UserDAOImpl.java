@@ -5,9 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSession;
+import org.apache.taglibs.standard.tag.common.sql.DataSourceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.spring.board.domain.UserVO;
@@ -94,6 +100,18 @@ public class UserDAOImpl implements UserDAO{
         // 유효시간이 남아있고(>now()) 전달받은 세션 id와 일치하는 사용자 정보를 꺼낸다.
         return session.selectOne(namespace+".checkUserWithSessionKey",sessionId);
 	}
+	
+//	@Override
+//	public UserVO checkUserWithSessionKey(String sessionId) {
+//        // 유효시간이 남아있고(>now()) 전달받은 세션 id와 일치하는 사용자 정보를 꺼낸다.
+//		UserVO userVO = null;
+//		try {
+//			userVO = jdbcTemplate.queryForObject("select * from member where sessionKey = ? and sessionLimit > now()", new BeanPropertyRowMapper<UserVO>(UserVO.class), sessionId);
+//		} catch (DataAccessException e) {
+//			e.printStackTrace();
+//		}
+//		return userVO;
+//	}
 
 	@Override
 	public String findId(UserVO userVO) throws Exception {

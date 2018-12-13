@@ -15,6 +15,32 @@ public class UserVO {
 	private String userAdmin;
 	
 	
+	@Override
+	public String toString() {
+		return "UserVO [userID=" + userID + ", userEmail=" + userEmail + ", userPassword=" + userPassword
+				+ ", userName=" + userName + ", userPhone=" + userPhone + ", userAddr=" + userAddr + ", userPoint="
+				+ userPoint + ", userLevel=" + userLevel + ", userLoginCount=" + userLoginCount + ", userDate="
+				+ userDate + ", userValidate=" + userValidate + ", userAdmin=" + userAdmin + "]";
+	}
+
+	public UserVO() {
+	}
+	
+	public UserVO(String userEmail, String userPassword, String userName, String userPhone, String userAddr,
+			int userPoint, int userLevel, int userLoginCount, String userDate, int userValidate, String userAdmin) {
+		this.userEmail = userEmail;
+		this.userPassword = userPassword;
+		this.userName = userName;
+		this.userPhone = userPhone;
+		this.userAddr = userAddr;
+		this.userPoint = userPoint;
+		this.userLevel = userLevel;
+		this.userLoginCount = userLoginCount;
+		this.userDate = userDate;
+		this.userValidate = userValidate;
+		this.userAdmin = userAdmin;
+	}
+	
 	public int getUserID() {
 		return userID;
 	}

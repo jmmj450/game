@@ -9,4 +9,5 @@ public interface ReplyDAO {
 	void delete(int rNum) throws Exception;
 	List<ReplyVO> list(int bNum) throws Exception;
 	int selectMaxRnum() throws Exception;
+	int allcount(int bNum) throws Exception;
 }

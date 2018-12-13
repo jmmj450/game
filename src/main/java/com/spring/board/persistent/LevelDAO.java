@@ -11,4 +11,5 @@ public interface LevelDAO {
 	List<LevelVO> list(int page) throws Exception;
 	LevelVO select(int level) throws Exception;
 	LevelVO selectMyLevel(int point) throws Exception;
+	int count() throws Exception;
 }

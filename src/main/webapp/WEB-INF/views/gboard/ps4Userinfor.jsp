@@ -28,14 +28,14 @@ pageEncoding="UTF-8" %>
       <c:forEach var="item" items="${list}">
 	      <tr>
 	        <td>${item.bNum}</td>
-	        <td>${item.year}</td>
-	        <td>${item.month}</td>
+	        <td>${item.bYear}</td>
+	        <td>${item.bMonth}</td>
 	        <td>
 	        <c:if test="${item.reLev gt 0 }">
 	        	<img src="../resources/img/level.gif" width="${item.reLev*10 }" height="16">
 	        	<img src="../resources/img/re.gif">
 	        </c:if>
-	        <a href="/gboard/detail?bNum=${item.bNum}&page=${pagingVO.page}&year=${year}&month=${month}">${item.bTitle}</a>
+	        <a href="/gboard/detail?bNum=${item.bNum}&page=${pagingVO.page}&bYear=${bYear}&bMonth=${bMonth}">${item.bTitle}</a>
 	        </td>
 	        <td>${item.bReadCount}</td>
 			<td>${item.bWriteDate}</td> 

@@ -1,5 +1,7 @@
 package com.spring.board.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,12 +10,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
@@ -72,14 +77,14 @@ public class GBController {
 	
 	// ps4 게시판 
 	@RequestMapping("/gboard/list")
-	public String boardList(Model model, @RequestParam(defaultValue="1", required=false) int page,GBoardVO gBoardVO) throws Exception{
+	public String boardList(Model model, @RequestParam(defaultValue="1", required=false) int page, @ModelAttribute GBoardVO gBoardVO) throws Exception{
 		Map<String, Object> info = new HashMap<String, Object>();
 		int pageSize = 15;
 		int startRow  = (page-1)*pageSize;
 		
 		info.put("page", startRow);
-		info.put("year", gBoardVO.getYear());
-		info.put("month", gBoardVO.getMonth());
+		info.put("year", gBoardVO.getbYear());
+		info.put("month", gBoardVO.getbMonth());
 		
 		List<GBoardVO> list = gBoardService.list(info);
 		int count = gBoardService.getBoardCount(info);
@@ -100,11 +105,11 @@ public class GBController {
 	        pagingVO.setStartPage(startPage);
 	        pagingVO.setEndPage(endPage);
 		
-	    System.out.println(gBoardVO.getYear());    
-	    System.out.println(gBoardVO.getMonth()); 
+	    System.out.println(gBoardVO.getbYear());    
+	    System.out.println(gBoardVO.getbMonth()); 
 	        
-	    model.addAttribute("year", gBoardVO.getYear());
-	    model.addAttribute("month", gBoardVO.getMonth());
+	    model.addAttribute("year", gBoardVO.getbYear());
+	    model.addAttribute("month", gBoardVO.getbMonth());
 		model.addAttribute("list", list);
 		model.addAttribute("pagingVO", pagingVO);
 		return "/gboard/ps4Userinfor";
@@ -112,13 +117,13 @@ public class GBController {
 	
 	// 게시판  검색
 	@RequestMapping("/gboard/search")
-	public String boardSearch(@RequestParam String searchOption, @RequestParam String keyword,GBoardVO gBoardVO, Model model ,
+	public String boardSearch(@RequestParam String searchOption, @RequestParam String keyword,@ModelAttribute GBoardVO gBoardVO, Model model ,
 			@RequestParam(defaultValue="1", required=false) int page) throws Exception {
 		Map<String, Object> search = new HashMap<String, Object>();
 		keyword = keyword.replaceAll("\\p{Z}", "");
 		search.put("keyword", keyword);
-		search.put("year", gBoardVO.getYear());
-		search.put("month", gBoardVO.getMonth());
+		search.put("year", gBoardVO.getbYear());
+		search.put("month", gBoardVO.getbMonth());
 
 		int count = 0;
 		List<GBoardVO> list;
@@ -157,8 +162,8 @@ public class GBController {
 			
 		}
 		
-		model.addAttribute("year", gBoardVO.getYear());
-		model.addAttribute("month", gBoardVO.getMonth());
+		model.addAttribute("year", gBoardVO.getbYear());
+		model.addAttribute("month", gBoardVO.getbMonth());
 		return "/board/ps4UserinforSe";
 	}
 	// 게시판 검색 
@@ -179,11 +184,39 @@ public class GBController {
 
 	//@RequestParam String bTitle
 	@RequestMapping(value="/gboard/write", method= RequestMethod.POST)
-	public String boardWrite(GBoardVO gBoardVO, HttpServletRequest request, GBDetailVO gbdetailVO) throws Exception{
-		System.out.println("control:" + gBoardVO.getYear());
-		System.out.println(gBoardVO.getMonth());
+	public String boardWrite(@ModelAttribute GBoardVO gBoardVO, HttpServletRequest request, @ModelAttribute GBDetailVO gbdetailVO, @RequestParam(value="file") MultipartFile multipartFile) throws Exception{
+		System.out.println("gBoardVO.getbYear()rol: " + gBoardVO.getbYear());
+		System.out.println("gBoardVO.getbMonth(): " + gBoardVO.getbMonth());
 		
-		ServletContext application =  request.getSession().getServletContext();
+		File file = null;
+		String realPath = "";
+		String filename = ""; // 파일명 초기화
+		if (!multipartFile.isEmpty()) { // 파일 있으면(업로드 했으면)
+			ServletContext application = request.getServletContext();
+			realPath = application.getRealPath("/resources/editor/upload");
+			
+			filename = multipartFile.getOriginalFilename(); // 업로드한 파일명 가져오기
+			// 엣지 브라우저 요청 파일이름 처리
+			int index = filename.lastIndexOf("\\");
+			filename = filename.substring(index + 1);
+	        
+	        file = new File(realPath, filename);
+	        if (file.exists()) { // 해당 경로에 동일한 파일명이 이미 존재하는 경우
+	        	// 파일명 앞에 업로드 시간 밀리초 붙여서 파일명 중복을 방지
+	        	filename = System.currentTimeMillis() + "_" + filename;
+	        	file = new File(realPath, filename);
+	        }
+	        
+	        System.out.println("업로드 경로: " + realPath);
+	        System.out.println("업로드 파일명: " + filename);
+	        
+	        // 업로드 수행
+	        IOUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));
+		} else {
+			System.out.println("파일이 존재하지 않거나 파일크기가 0 입니다.");
+		}
+		
+/*		ServletContext application =  request.getSession().getServletContext();
 		String realPath = application.getRealPath("/resources/editor/upload");
 		// System.out.println("realPath : " + realPath);
 		int maxPostSize = 1024*1024*5; // 5MB
@@ -196,11 +229,15 @@ public class GBController {
 		gBoardVO.setUserEmail(multi.getParameter("userEmail"));
 		gBoardVO.setbTitle(multi.getParameter("bTitle"));
 		gBoardVO.setbContent(multi.getParameter("bContent"));
-		gBoardVO.setFileName(multi.getFilesystemName("filename"));
+		gBoardVO.setFileName(multi.getFilesystemName("filename"));*/
 		// System.out.println(gBoardVO);
 		
-		gBoardService.insert(gBoardVO, request, gbdetailVO);
-		return "redirect:/gboard/list?page=1&year="+gBoardVO.getYear()+"&month="+gBoardVO.getMonth();
+		gBoardVO.setFileName(filename); // 파일명
+		String path = file.getPath(); // 전체경로
+		System.out.println("gBoardVO.getFileName()" + gBoardVO.getFileName());
+		
+		gBoardService.insert(gBoardVO, path, gbdetailVO);
+		return "redirect:/gboard/list?page=1&year="+gBoardVO.getbYear()+"&month="+gBoardVO.getbMonth();
 	}
 	
 	@RequestMapping("/gboard/reWriteForm")
@@ -209,16 +246,16 @@ public class GBController {
 		model.addAttribute("reRef", gBoardVO.getReRef());
 		model.addAttribute("reLev", gBoardVO.getReLev());
 		model.addAttribute("reSeq", gBoardVO.getReSeq());
-		model.addAttribute("year", gBoardVO.getYear());
-		model.addAttribute("month", gBoardVO.getMonth());
+		model.addAttribute("year", gBoardVO.getbYear());
+		model.addAttribute("month", gBoardVO.getbMonth());
 		model.addAttribute("page", page);
 		return "/gboard/reWrite";
 	}
 	
 	@RequestMapping("/gboard/reWrite")
-	public String boardreWrite(GBoardVO gBoardVO,Model model,@RequestParam int page)throws Exception{
+	public String boardreWrite(@ModelAttribute GBoardVO gBoardVO,Model model,@RequestParam int page)throws Exception{
 		gBoardService.reinsert(gBoardVO);
-		return "redirect:/gboard/board?page="+page+"&year="+gBoardVO.getYear()+"&month="+gBoardVO.getMonth();
+		return "redirect:/gboard/board?page="+page+"&year="+gBoardVO.getbYear()+"&month="+gBoardVO.getbMonth();
 	}
 
 	
@@ -237,7 +274,7 @@ public class GBController {
 	}
 	
 	@RequestMapping("/gboard/detail")
-	public String boardDetail(GBoardVO gBoardVO, Model model,HttpSession session,@RequestParam int page) throws Exception{	
+	public String boardDetail(@ModelAttribute GBoardVO gBoardVO, Model model,HttpSession session,@RequestParam int page) throws Exception{	
 	    //조회수 증가
 		
 		gBoardVO = gBoardService.detailService(gBoardVO.getbNum());
@@ -252,7 +289,7 @@ public class GBController {
 	}		
 	
 	@RequestMapping("/gboard/updateForm")
-	public String boardUpdateForm (GBoardVO gBoardVO, Model model,@RequestParam int page) throws Exception{	
+	public String boardUpdateForm (@ModelAttribute GBoardVO gBoardVO, Model model,@RequestParam int page) throws Exception{	
 		gBoardVO = gBoardService.select(gBoardVO.getbNum());
 		model.addAttribute("gBoardVO", gBoardVO);
 		model.addAttribute("page", page);
@@ -260,10 +297,10 @@ public class GBController {
 	}	
 	
 	@RequestMapping(value="/gboard/update", method= RequestMethod.POST)
-	public String boardUpdate(GBoardVO gBoardVO,@RequestParam int page) throws Exception{
+	public String boardUpdate(@ModelAttribute GBoardVO gBoardVO,@RequestParam int page) throws Exception{
 		gBoardService.update(gBoardVO);
 		
-		return "redirect:/gboard/list?page="+page+"&year="+gBoardVO.getYear()+"&category="+gBoardVO.getMonth();
+		return "redirect:/gboard/list?page="+page+"&year="+gBoardVO.getbYear()+"&category="+gBoardVO.getbMonth();
 	}
 	
 	

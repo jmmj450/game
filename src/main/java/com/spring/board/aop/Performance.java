@@ -11,6 +11,6 @@ public class Performance {
 	
 	@Before("execution(* com.spring.board.service.BoardServiceImpl.*(..))")
 	public void hello(JoinPoint jp){
-		System.out.println("안녕!!");
+		//System.out.println("안녕!!");
 	}
 }

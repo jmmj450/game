@@ -394,6 +394,11 @@ function jusoCallBack(roadFullAddr){
 								</div>
 							</div>
 							<br>
+							<h4 class="input_title">폰번호</h4>
+							<div class="row">
+								<input name="userPhone" type="text" class="form-control" placeholder="Enter userPhone" required="true" />
+							</div>
+							<br>
 							<h4 class="input_title">주소</h4>
 							<div class="row">
 								<input name="userAddr" type="text" class="form-control" placeholder="Enter userAddr" required="true" readonly="true"/>
@@ -453,9 +458,7 @@ function jusoCallBack(roadFullAddr){
 	
 	<!-- Ajax 요청 -->
 	function sendAuthEmail(){
-		$( "#btnAuth" ).hide();
-		$( "#spanAuth" ).show();
-
+	
 		var userEmail = document.getElementById('userEmail').value;
 		var userName = document.getElementById('userName').value;
 
@@ -463,6 +466,7 @@ function jusoCallBack(roadFullAddr){
 			alert('이메일을 입력하세요');
 			return false;
 		}
+		
 		if(userName == ''){
 			alert('이름을 입력하세요');
 			return false;
@@ -472,6 +476,9 @@ function jusoCallBack(roadFullAddr){
 				"userEmail":userEmail,
 				"userName":userName
 		};
+			
+		$( "#btnAuth" ).hide();
+		$( "#spanAuth" ).show();
 
 		rJson = JSON.stringify(rJson);
 		

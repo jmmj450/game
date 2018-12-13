@@ -4,7 +4,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spring.point">
-
+		
+	<insert id="insert">
+		INSERT INTO point (itemName, itemType, point) VALUES (#{itemName}, #{itemType}, #{point})
+	</insert>
+	
 	<select id="select" resultType="com.spring.board.domain.PointVO">
 		SELECT * FROM point WHERE itemType = #{itemType}
 	</select>
@@ -16,5 +20,9 @@
 	<update id="update">
 		UPDATE point SET point = #{point} WHERE num = #{num} 
 	</update>
+	
+	<select id="count" resultType="int">
+		SELECT count(*) FROM point
+	</select>
 	
 </mapper>

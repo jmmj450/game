@@ -71,7 +71,7 @@ $(document).ready(function(){
 	        <td>상품이미지</td>
 	        <td>
 	          <img src="/resources/editor/upload/${vo.proFile}" height="300px" width="310px">
-	          <input type="file" class="btn btn-success" name="filename" id="proFile" value="파일선택"/>
+	          <input type="file" class="btn btn-success" name="file" id="proFile" value="파일선택"/>
 	          <input type="hidden" name="orgFilename" value="${vo.proFile}">
 	        </td>
 	      </tr>

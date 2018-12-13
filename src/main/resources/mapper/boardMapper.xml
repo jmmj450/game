@@ -12,7 +12,7 @@
 	
 	<!-- 게시글 목록 -->
 	<select id="list" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} ORDER BY reRef DESC, reSeq ASC offset #{page} limit 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} ORDER BY notice DESC, reRef DESC, reSeq ASC limit #{page}, 15
 	</select>
 	<!-- 게시글 목록 -->
 	
@@ -24,8 +24,8 @@
 	
 	<!-- 게시글 입력 쿼리  -->
 	<insert id="insert">
-      INSERT INTO board(bigcategory, category, bTitle, bContent, bReadCount, password, fileName, reRef, reLev, reSeq, recommend, report, notice, bWriteDate,userEmail)
-      VALUES(#{bigcategory},#{category}, #{bTitle}, #{bContent}, #{bReadCount}, #{password}, #{fileName}, #{reRef}, #{reLev}, #{reSeq}, #{recommend}, #{report}, #{notice}, now(),#{userEmail}) 
+      INSERT INTO board(bigcategory, category, bTitle, bContent, bReadCount, password, fileName, reRef, reLev, reSeq, recommend, report, notice, bWriteDate,userEmail,ip)
+      VALUES(#{bigcategory},#{category}, #{bTitle}, #{bContent}, #{bReadCount}, #{password}, #{fileName}, #{reRef}, #{reLev}, #{reSeq}, #{recommend}, #{report}, #{notice}, now(),#{userEmail},#{ip}) 
    </insert>
 	<!-- 게시글 입력 쿼리  -->
 	
@@ -62,19 +62,19 @@
 	<!-- 검색 쿼리 -->
 	
 	<select id="searchAll" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and (bTitle LIKE CONCAT('%',#{keyword},'%') or bContent LIKE CONCAT('%',#{keyword},'%')) ORDER BY bNum DESC offset #{page} limit 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and (bTitle LIKE CONCAT('%',#{keyword},'%') or bContent LIKE CONCAT('%',#{keyword},'%')) ORDER BY bNum DESC limit #{page}, 15
 	</select>
 	
 	<select id="searchTitle" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bTitle LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC  offset #{page} limit 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bTitle LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC limit #{page}, 15
 	</select>
 	
 	<select id="searchContent" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bContent LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC  offset #{page} limit 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and bContent LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC limit #{page}, 15
 	</select>
 	
 	<select id="searchWritert" resultType="com.spring.board.domain.BoardVO" parameterType="map">
-		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and userEmail LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC  offset #{page} limit 15
+		SELECT * FROM board WHERE bigcategory=#{bigcategory} and category =#{category} and userEmail LIKE CONCAT('%',#{keyword},'%') ORDER BY bNum DESC limit #{page}, 15
 	</select>
 	
 	<select id="searchAllCount" resultType="int" parameterType="map">
@@ -122,7 +122,7 @@
 	
 	<!-- 신고 있는글 검색  -->
 		<select id="reportboard" resultType="com.spring.board.domain.ReportVO">
-			SELECT bNum,userEmail,recommend,count(*) report,uri,bTitle,ok FROM boardupdown WHERE report > 0 GROUP BY bNum;
+			SELECT bNum,userEmail,recommend,count(*) report,uri,bTitle,ok FROM boardupdown WHERE report > 0 GROUP BY bNum ORDER BY bNum DESC;
 		</select>
 	<!-- 신고 있는글 검색  -->
 	
@@ -134,9 +134,17 @@
 	
 	<!-- 신고글 상세 보기 -->
 		<select id="reportdetail" resultType="com.spring.board.domain.ReportVO">
-			SELECT bNum,userEmail,recommend,count(*) report,uri,bTitle,ok FROM boardupdown WHERE report > 0 GROUP BY bNum HAVING bNum=#{bNum};
+			SELECT bNum,userEmail,recommend,count(*) report,uri,bTitle,ok FROM boardupdown WHERE report > 0 GROUP BY bNum HAVING bNum=#{bNum} ;
 		</select>
 	<!-- 신고글 상세 보기 -->
+	
+	<!-- 베스트 글 불러오기  -->
+		<select id="boardbest" resultType="com.spring.board.domain.BoardVO">
+			SELECT * FROM board WHERE bigcategory=#{bigcategory} and category=#{category} ORDER BY recommend desc limit 16 ;
+		</select>
+	<!-- 베스트 글 불러오기  -->
+	
+	
 </mapper>
 
 

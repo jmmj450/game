@@ -1,17 +1,16 @@
 package com.spring.board.domain;
 
 public class PointHistoryVO {
-	private int no;
+	private int num;
 	private String userEmail;
 	private String itemType;
 	private int point;
-	private String date;
-	
-	public int getNo() {
-		return no;
+	private String reg_date;
+	public int getNum() {
+		return num;
 	}
-	public void setNo(int no) {
-		this.no = no;
+	public void setNum(int num) {
+		this.num = num;
 	}
 	public String getUserEmail() {
 		return userEmail;
@@ -31,13 +30,14 @@ public class PointHistoryVO {
 	public void setPoint(int point) {
 		this.point = point;
 	}
-	public String getDate() {
-		return date;
+	public String getReg_date() {
+		return reg_date;
 	}
-	public void setDate(String date) {
-		this.date = date;
+	public void setReg_date(String reg_date) {
+		this.reg_date = reg_date;
 	}
 	
+
 	
 	
 }

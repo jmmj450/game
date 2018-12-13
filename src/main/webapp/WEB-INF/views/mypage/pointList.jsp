@@ -20,11 +20,11 @@ pageEncoding="UTF-8" %>
     <tbody>
       <c:forEach var="item" items="${list}">
 	      <tr>
-	        <td>${item.no}</td>
+	        <td>${item.num}</td>
 	        <td>${item.userEmail}</td>
 	        <td>${item.itemType}</td>
 	        <td>${item.point}</td>
-	        <td>${item.date}</td>
+	        <td>${item.reg_date}</td>
 	      </tr>
       </c:forEach>
 

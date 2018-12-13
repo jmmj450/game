@@ -15,7 +15,7 @@ pageEncoding="UTF-8" %>
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>no</th>
+        <th>num</th>
         <th>아이템명</th>
         <th>포인트</th>
         <th>수정</th>
@@ -23,13 +23,13 @@ pageEncoding="UTF-8" %>
     </thead>
     <tbody>
       <c:forEach var="item" items="${list}">
-		  <form action="/admin/pointUpdate" method="post" id="fn${item.no}">      
-		  <input type="hidden" name="no" id="no" value="${item.no}">
+		  <form action="/admin/pointUpdate" method="post" id="fn${item.num}">      
+		  <input type="hidden" name="no" id="no" value="${item.num}">
 	      <tr>
-	        <td>${item.no}</td>
+	        <td>${item.num}</td>
 	        <td>${item.itemName}</td>
 	        <td><input type="text" name="point" value="${item.point}"></td>
-	        <td><a href="#" onclick="changeData('fn${item.no}');" ><i class="material-icons">done_outline</i></a></td>
+	        <td><a href="#" onclick="changeData('fn${item.num}');" ><i class="material-icons">done_outline</i></a></td>
 	      </tr>
           </form>
       </c:forEach>

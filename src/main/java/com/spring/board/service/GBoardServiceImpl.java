@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.spring.board.domain.GBDetailVO;
 import com.spring.board.domain.GBoardVO;
@@ -30,28 +31,25 @@ public class GBoardServiceImpl implements GBoardService{
 	private GBDetailService gbDetailService;
 	
 	@Override
-	public void insert(GBoardVO gBoard, HttpServletRequest request,  GBDetailVO gbdetailVO) throws Exception {
+	public void insert(GBoardVO gBoard, String path, GBDetailVO gbdetailVO) throws Exception {
 		Integer maxNum = gBoardDAO.maxbNum();
 		if (maxNum == null) {
 			maxNum = 1;
 		} else {
 			maxNum = gBoardDAO.maxbNum() + 1;
 		}
-		System.out.println("year : " + gBoard.getYear());
+		System.out.println("year : " + gBoard.getbYear());
 		gBoard.setReRef(maxNum);
 		gBoard.setReLev(0);
 		gBoard.setReSeq(0);
 		gBoard.setbReadCount(0);
 		gBoardDAO.insert(gBoard);
 		
-		ServletContext application =  request.getSession().getServletContext();
-		String realPath = application.getRealPath("/resources/editor/upload");
 		   
         try {
             // csv 데이터 파일
-            File csv = new File(realPath, gBoard.getFileName());
-            System.out.println(csv);
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(csv), "UTF-8"));
+            System.out.println("gBoard.getFileName() : " + gBoard.getFileName());
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
 
            String line = "";
           

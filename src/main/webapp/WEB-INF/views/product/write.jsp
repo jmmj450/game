@@ -73,7 +73,7 @@ $(document).ready(function(){
 	      </tr> 
 	      <tr class="table-warning">
 	        <td>상품이미지</td>
-	        <td><input type="file" class="btn btn-success" name="filename" id="proFile" value="파일선택"/></td>
+	        <td><input type="file" class="btn btn-success" name="file" id="proFile" value="파일선택"/></td>
 	      </tr>
 	      <tr class="table-dark text-dark">
 	        <td colspan="2">

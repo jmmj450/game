@@ -19,7 +19,7 @@ public interface BoardDAO {
 	List<BoardVO> searchTitle(Map<String, Object> search) throws Exception;
 	List<BoardVO> searchContent(Map<String, Object> search) throws Exception;
 	List<BoardVO> searchWriter(Map<String, Object> search) throws Exception;
-	int maxbNum() throws Exception;
+	Integer maxbNum() throws Exception;
 	void seqUp(BoardVO boardVO) throws Exception;
 	
 	int searchAllCount(Map<String, Object> search) throws Exception;
@@ -45,6 +45,8 @@ public interface BoardDAO {
 	
 	ReportVO reportdetail(int bNum) throws Exception;
 	
+	//추가
+		List<BoardVO> boardbest(BoardVO boardVO) throws Exception;
 	
 
 }

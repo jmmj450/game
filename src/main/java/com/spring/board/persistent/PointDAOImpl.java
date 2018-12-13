@@ -17,6 +17,12 @@ public class PointDAOImpl implements PointDAO{
 	private SqlSession session;
 	private static final String namespace = "com.spring.point";
 	
+	
+	@Override
+	public void insert(PointVO pointVO) throws Exception {
+		session.update(namespace+".insert", pointVO);
+	}
+
 	@Override
 	public PointVO select(String itemType) throws Exception {
 		return session.selectOne(namespace+".select", itemType);
@@ -30,6 +36,11 @@ public class PointDAOImpl implements PointDAO{
 	@Override
 	public List<PointVO> list(int page) throws Exception {
 		return session.selectList(namespace+".list", page);
+	}
+
+	@Override
+	public int count() throws Exception {
+		return session.selectOne(namespace+".count");
 	}
 	
 }

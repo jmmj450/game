@@ -19,4 +19,8 @@
 	<select id="selectMaxRnum" resultType="int">
 		SELECT max(rNum) FROM reply
 	</select>
+	
+	<select id="allCount" resultType="int">
+		SELECT count(*) FROM reply WHERE bNum = #{bNum}
+	</select>
 </mapper>

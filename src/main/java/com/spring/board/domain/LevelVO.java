@@ -1,15 +1,22 @@
 package com.spring.board.domain;
 
 public class LevelVO {
-	private int no;
+	private int num;
 	private int point;
-	private int level;
+	private int levels;
 	
-	public int getNo() {
-		return no;
+	public LevelVO() {
 	}
-	public void setNo(int no) {
-		this.no = no;
+	
+	public LevelVO(int point, int levels) {
+		this.point = point;
+		this.levels = levels;
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
 	}
 	public int getPoint() {
 		return point;
@@ -17,11 +24,11 @@ public class LevelVO {
 	public void setPoint(int point) {
 		this.point = point;
 	}
-	public int getLevel() {
-		return level;
+	public int getLevels() {
+		return levels;
 	}
-	public void setLevel(int level) {
-		this.level = level;
+	public void setLevels(int levels) {
+		this.levels = levels;
 	}
 	
 }

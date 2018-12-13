@@ -1,16 +1,25 @@
 package com.spring.board.domain;
 
 public class PointVO {
-	private int no;
+	private int num;
 	private String itemName;
 	private String itemType;
 	int point;
 	
-	public int getNo() {
-		return no;
+	public PointVO() {
 	}
-	public void setNo(int no) {
-		this.no = no;
+	
+	public PointVO(String itemName, String itemType, int point) {
+		this.itemName = itemName;
+		this.itemType = itemType;
+		this.point = point;
+	}
+
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
 	}
 	public String getItemName() {
 		return itemName;
@@ -30,5 +39,7 @@ public class PointVO {
 	public void setPoint(int point) {
 		this.point = point;
 	}
+	
+	
 	
 }

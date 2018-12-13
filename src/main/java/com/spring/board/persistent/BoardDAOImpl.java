@@ -23,7 +23,7 @@ public class BoardDAOImpl implements BoardDAO{
 	private static final String namespace = "com.spring.board";
 	
 	@Override
-	public int maxbNum() throws Exception {
+	public Integer maxbNum() throws Exception {
 		return session.selectOne(namespace+".reRef");
 	}
 	
@@ -216,4 +216,10 @@ public class BoardDAOImpl implements BoardDAO{
 	public ReportVO reportdetail(int bNum) throws Exception {
 		return session.selectOne(namespace+".reportdetail", bNum);
 	}
+	
+	//추가
+		@Override
+		public List<BoardVO> boardbest(BoardVO boardVO) throws Exception {
+			return session.selectList(namespace+".boardbest", boardVO);
+		}
 }

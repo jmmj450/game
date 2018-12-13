@@ -10,12 +10,12 @@ pageEncoding="UTF-8" %>
   <form action="/gboard/write" method="POST" name="w_form"  enctype="multipart/form-data" >
   <input type="hidden" name="userEmail" value="${userEmail }">
   	<div class="form-group" >
-  		<select name="year">
+  		<select name="bYear">
   			<option value="">년 선택</option>
   			<option value="2018">2018</option>
   			<option value="2019">2019</option>
   		</select>
-   		<select name="month">
+   		<select name="bMonth">
   			<option value="">월 선택</option>
   			<option value="1">1</option>
   			<option value="2">2</option>
@@ -35,7 +35,7 @@ pageEncoding="UTF-8" %>
       <input name="bTitle" type="text" class="form-control" placeholder="Enter title">
     </div>
      <div class="form-group">
-      <input type="file" class="btn btn-success" name="filename" id="proFile" value="파일선택"/>
+      <input type="file" class="btn btn-success" name="file" id="proFile" value="파일선택"/>
     </div>   
     <div class="form-group">
       <textarea name="bContent" id="textAreaContent" style="width: 100%" rows="15" cols="80"></textarea>
@@ -57,12 +57,12 @@ pageEncoding="UTF-8" %>
    
   // submit
   function submitContents(elClickedObj) {
-	  if(w_form.year.value == ""){
+	  if(w_form.bYear.value == ""){
 		  alert('년을 선택하세요.');
 		  return false;
 	  }
 	  
-	  if(w_form.month.value == ""){
+	  if(w_form.bMonth.value == ""){
 		  alert('월을 선택하세요.');
 		  return false;
 	  }

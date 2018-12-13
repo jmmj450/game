@@ -4,9 +4,9 @@ pageEncoding="UTF-8" %>
 <%@include file="../header.jsp" %>
 <script>
 
-	function deleteData(no){
+	function deleteData(num){
 		if (confirm("정말로 삭제하시겠습니까?")) {
-			location.href="/admin/levelDelete?no="+no;
+			location.href="/admin/levelDelete?num="+num;
 		}
 	}
 
@@ -30,13 +30,13 @@ pageEncoding="UTF-8" %>
     </thead>
     <tbody>
       <c:forEach var="item" items="${list}">
-        <form action="/admin/levelUpdate" method="post" id="fn${item.no}">
-        <input type="hidden" name="no" id="no" value="${item.no}">     
+        <form action="/admin/levelUpdate" method="post" id="fn${item.num}">
+        <input type="hidden" name="num" id="num" value="${item.num}">     
 	      <tr>
-	        <td><input type="text" name="level" value="${item.level}"></td>
+	        <td><input type="text" name="levels" value="${item.levels}"></td>
 	        <td><input type="text" name="point" value="${item.point}"></td>
-	        <td><a href="#" onclick="changeData('fn${item.no}');" ><i class="material-icons">done_outline</i></a></td>
-	        <td><a href="#" onclick="deleteData('${item.no}');" ><i class="material-icons">delete</i></a></td>
+	        <td><a href="#" onclick="changeData('fn${item.num}');" ><i class="material-icons">done_outline</i></a></td>
+	        <td><a href="#" onclick="deleteData('${item.num}');" ><i class="material-icons">delete</i></a></td>
 	      </tr>
 	    </form>
       </c:forEach>

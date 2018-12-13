@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.spring.board.interceptor.SessionInterceptor;
+
 @Configuration
 public class AppConfig {
     @Autowired
@@ -45,4 +47,6 @@ public class AppConfig {
         this.dataSource = factory.build();
         return this.dataSource;
     }
+    
+    
 }

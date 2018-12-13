@@ -22,22 +22,22 @@ extends HandlerInterceptorAdapter {
 	@Autowired
 	UserService userService;
 	
-	@Override
-	public boolean preHandle(HttpServletRequest request,
-			HttpServletResponse response, Object handler) throws Exception {
-		HttpSession session = request.getSession();
-		System.out.println("preHandle");
-		
-		if(session.getAttribute("userEmail") != null){
-			session.removeAttribute("userEmail");
-			session.removeAttribute("userAdmin");
-			System.out.println("===== session validate");
-		}
-
-       return true;
-	}
+//	@Override
+//	public boolean preHandle(HttpServletRequest request,
+//			HttpServletResponse response, Object handler) throws Exception {
+//		HttpSession session = request.getSession();
+//		System.out.println("preHandle");
+//		
+//		if(session.getAttribute("userEmail") != null){
+//			session.removeAttribute("userEmail");
+//			session.removeAttribute("userAdmin");
+//			System.out.println("===== session validate");
+//		}
+//
+//       return true;
+//	}
 	
-	@Override
+/*	@Override
 	public void postHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
@@ -46,6 +46,9 @@ extends HandlerInterceptorAdapter {
 		ModelMap modelMap = modelAndView.getModelMap();
 		UserVO userVO = (UserVO)modelMap.get("userVO");
 		int result = (Integer)modelMap.get("result");
+		
+		System.out.println("modelMap.get(result) : " + modelMap.get("result"));
+		
 		String keepLogin = (String)modelMap.get("keepLogin");
 		
 		if(result == 1){ // 회원데이터가 있고
@@ -84,5 +87,5 @@ extends HandlerInterceptorAdapter {
 	            out.close();
 			 }
 		}
-	}
+	}*/
 }

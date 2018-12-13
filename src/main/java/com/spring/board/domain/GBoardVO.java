@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 
 public class GBoardVO {
 	private int bNum;
-	private String year;
-	private String month;
+	private String bYear;
+	private String bMonth;
 	private String bTitle;
 	private String bContent;
 	private int bReadCount;
@@ -26,17 +26,17 @@ public class GBoardVO {
 	public void setbNum(int bNum) {
 		this.bNum = bNum;
 	}
-	public String getYear() {
-		return year;
+	public String getbYear() {
+		return bYear;
 	}
-	public void setYear(String year) {
-		this.year = year;
+	public void setbYear(String bYear) {
+		this.bYear = bYear;
 	}
-	public String getMonth() {
-		return month;
+	public String getbMonth() {
+		return bMonth;
 	}
-	public void setMonth(String month) {
-		this.month = month;
+	public void setbMonth(String bMonth) {
+		this.bMonth = bMonth;
 	}
 	public String getbTitle() {
 		return bTitle;
@@ -117,6 +117,5 @@ public class GBoardVO {
 		this.bWriteDate = bWriteDate;
 	}
 	
-
 	
 }

@@ -12,20 +12,27 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spring.board.domain.BoardVO;
 import com.spring.board.domain.CategoryVO;
-import com.spring.board.domain.ReplyVO;
+import com.spring.board.domain.LevelVO;
 import com.spring.board.domain.PagingVO;
+import com.spring.board.domain.PointHistoryVO;
+import com.spring.board.domain.PointVO;
+import com.spring.board.domain.ReplyVO;
 import com.spring.board.domain.ReportVO;
+import com.spring.board.domain.UserVO;
 import com.spring.board.persistent.BoardDAO;
+import com.spring.board.persistent.LevelDAO;
+import com.spring.board.persistent.PointDAO;
+import com.spring.board.persistent.PointHistoryDAO;
 import com.spring.board.persistent.ReplyDAO;
 import com.spring.board.persistent.UserDAO;
 import com.spring.board.service.BoardService;
+import com.spring.board.service.UserService;
 import com.spring.board.util.MyUtils;
 
 //Controller, Repository, Service, Component
@@ -57,6 +64,14 @@ public class BController {
 	        return pagingVO;
 	}
 	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private PointHistoryDAO pointHistoryDAO;
+	
+	@Autowired
+	private PointDAO pointDAO;
 	
 	@Autowired
 	private BoardService boardService;
@@ -66,6 +81,11 @@ public class BController {
 	
 	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
+	private LevelDAO levelDAO;
+	
+	
 	
 	//dispatcher역활
 	//http://localhost:8000/board/
@@ -112,6 +132,10 @@ public class BController {
 	        pagingVO.setStartPage(startPage);
 	        pagingVO.setEndPage(endPage);
 		
+	      //boardbest 추가
+	        List<BoardVO> boardbest = boardService.boardbest(boardVO);
+	        model.addAttribute("boardbest", boardbest);
+	        
 	    model.addAttribute("bigcategory", boardVO.getBigcategory());
 	    model.addAttribute("category", boardVO.getCategory());
 		model.addAttribute("list", list);
@@ -209,9 +233,28 @@ public class BController {
 	}
 	
 	@RequestMapping("/board/reWrite")
-	public String boardreWrite(BoardVO boardVO,Model model,@RequestParam int page)throws Exception{
+	public String boardreWrite(BoardVO boardVO,Model model,@RequestParam int page,HttpSession session)throws Exception{
 		
-	
+		if(session.getAttribute("userEmail") != null){
+			PointHistoryVO pointHistoryVO = new PointHistoryVO();
+					// 포인트값 조회 후 포인트 히스토리 테이블에 저장
+					PointVO pointVO = pointDAO.select("write");
+					pointHistoryVO.setUserEmail((String)session.getAttribute("userEmail"));
+					pointHistoryVO.setItemType(pointVO.getItemType());
+					pointHistoryVO.setPoint(pointVO.getPoint());
+					pointHistoryDAO.insert(pointHistoryVO);
+
+					// 회원정보
+					UserVO userVO = userDAO.select((String)session.getAttribute("userEmail")); 
+					
+					// 포인트 추가
+					int lastPoint = userVO.getUserPoint() + pointVO.getPoint();
+					userVO.setUserPoint(lastPoint);
+					
+					// 자동등업처리
+					LevelVO levelVO = levelDAO.selectMyLevel(lastPoint);
+					userVO.setUserLevel(levelVO.getLevels());
+			}
 		
 		boardService.reinsert(boardVO);
 		
@@ -223,14 +266,38 @@ public class BController {
 	
 	//@RequestParam String bTitle
 	@RequestMapping(value="/board/write", method= RequestMethod.POST)
-	public String boardWrite(BoardVO boardVO) throws Exception{
-		System.out.println(boardVO.getBigcategory());
+	public String boardWrite(BoardVO boardVO,HttpSession session,HttpServletRequest request) throws Exception{
+		boardVO.setIp(request.getRemoteAddr());
 		boardService.insert(boardVO);
 		Map<String, String> map = boardService.getBigCategoryMap();
 		String bigC = map.get(boardVO.getBigcategory());
 		
+		if(session.getAttribute("userEmail") != null){
+		PointHistoryVO pointHistoryVO = new PointHistoryVO();
+				// 포인트값 조회 후 포인트 히스토리 테이블에 저장
+				PointVO pointVO = pointDAO.select("write");
+				pointHistoryVO.setUserEmail((String)session.getAttribute("userEmail"));
+				pointHistoryVO.setItemType(pointVO.getItemType());
+				pointHistoryVO.setPoint(pointVO.getPoint());
+				pointHistoryDAO.insert(pointHistoryVO);
+
+				// 회원정보
+				UserVO userVO = userDAO.select((String)session.getAttribute("userEmail")); 
+				
+				// 포인트 추가
+				int lastPoint = userVO.getUserPoint() + pointVO.getPoint();
+				userVO.setUserPoint(lastPoint);
+				
+				// 자동등업처리
+				LevelVO levelVO = levelDAO.selectMyLevel(lastPoint);
+				userVO.setUserLevel(levelVO.getLevels());
+		}
+		
 		return "redirect:/board/list?page=1&bigcategory="+boardVO.getBigcategory()+"&category="+boardVO.getCategory();
 	}
+	
+	
+	
 	
 	@RequestMapping(value="/board/delete")
 	public String boardDelete(@RequestParam int bNum, HttpSession session) throws Exception{	
@@ -248,6 +315,9 @@ public class BController {
 		return "redirect:/board/list?&"+category;
 	}
 	
+	
+	
+	// 상세보기
 	@RequestMapping("/board/detail")
 	public String boardDetail(BoardVO boardVO, Model model,HttpSession session,@RequestParam int page,HttpServletRequest request) throws Exception{	
 			String u = request.getRequestURL().toString();
@@ -258,7 +328,8 @@ public class BController {
 		   model.addAttribute("uri", u);
 	   }
 		
-	   
+	   model.addAttribute("bigcategory", boardVO.getBigcategory());
+	   model.addAttribute("category", boardVO.getCategory());
 		//조회수 증가
 		
 		boardVO = boardService.detailService(boardVO.getbNum());
@@ -266,11 +337,13 @@ public class BController {
 		String result = MyUtils.getYoutubeMovie(boardVO.getbContent());
 		boardVO.setbContent(result);
 		
+		int reCount = replyDAO.allcount(boardVO.getbNum());
+		
 		int check = 0;
 		if(session.getAttribute("userEmail") != null) {
 			check = userDAO.userAdmin((String)session.getAttribute("userEmail"));
 		}
-		
+		model.addAttribute("recount", reCount);
 		model.addAttribute("check", check);
 		
 		boardVO.setbContent(result);
@@ -357,6 +430,8 @@ public class BController {
 	@RequestMapping("/board/reportBoard")
 	public String reportBoard(Model model,@RequestParam(defaultValue="1", required=false) int page) throws Exception{
 		
+		
+		
 		int pageSize = 15;
 		int startRow  = (page-1)*pageSize;
 		
@@ -385,13 +460,12 @@ public class BController {
 		 return "board/reportBoard";
 	}
 	
-	@RequestMapping("/board/reportDetail")
+	@RequestMapping("/board/reportdetail")
 	public String reporydetail(@RequestParam int bNum,@RequestParam int page,Model model) throws Exception{
 		ReportVO reportVO = boardService.reportdetail(bNum);
 		if(reportVO.getOk() == 0){
 			boardService.ok(bNum);
 		}
-		
 		model.addAttribute("reportVO", reportVO);
 		model.addAttribute("page", page);
 		return "board/reportDetail";

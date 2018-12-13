@@ -94,7 +94,7 @@
   });
    
   // submit
-  function submitContents(elClickedObj) {
+  function submitContents() {
 	  if(w_form.category.value == ""){
 		  alert('카테고리를 선택하세요.');
 		  return false;
@@ -108,18 +108,35 @@
 	  
 	  if($('#password').val() == ""){
 		  alert('비밀번호를 입력하세요.');
+		  $('#password').focus();
 		  return false;
 	   }
 	  
+	  if($('.writeTitleInput').val() == ""){
+		  alert('제목을 입력하세요');
+		  $('.writeTitleInput').focus();
+		  return false;
+	  }
+	  
+// 	  if($('#textAreaContent').val() == ""){
+// 		  alert('내용을 입력하세요');
+// 		  $('#textAreaContent').focus();
+// 		  return false;
+// 	  }
+	  
+// 	  if($('#textAreaContent').val() == ""){
+// 	        alert('내용을 입력하세요');
+// 	        oEditors.getById["textAreaContent"].exec("FOCUS");
+// 	        return false;
+// 	     }
 	  
       // 에디터의 내용이 textarea에 적용된다.
       oEditors.getById["textAreaContent"].exec("UPDATE_CONTENTS_FIELD", [ ]);
       var con = document.w_form.bContent;
       con.value = document.getElementById("textAreaContent").value;
       try {
-          elClickedObj.form.submit();
-      } catch(e) {
-      }
+    	  form.submit();
+      } catch(e) {}
   }
    
   // textArea에 이미지 첨부

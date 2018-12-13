@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS board (
   recommend integer DEFAULT NULL,
   report integer DEFAULT NULL,
   notice integer DEFAULT NULL,
-  bWriteDate date DEFAULT NULL
+  bWriteDate date DEFAULT NULL,
+  ip varchar(50) 
 );
 
 
@@ -37,8 +38,7 @@ CREATE TABLE IF NOT EXISTS cart (
   cartNum SERIAL PRIMARY KEY,
   userEmail varchar(30) NOT NULL,
   cartAmount integer NOT NULL DEFAULT '1',
-  proNum integer NOT NULL,
-  FOREIGN KEY (proNum) REFERENCES product (proNum)
+  proNum integer NOT NULL
 );
 
 

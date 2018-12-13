@@ -19,6 +19,7 @@ public class BoardVO {
 	private int report;
 	private int notice;
 	private Timestamp bWriteDate;
+	private String ip;
 	public int getbNum() {
 		return bNum;
 	}
@@ -115,6 +116,14 @@ public class BoardVO {
 	public void setbWriteDate(Timestamp bWriteDate) {
 		this.bWriteDate = bWriteDate;
 	}
+	public String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+	
+	
 	
 	
 	

@@ -3,9 +3,7 @@ package com.spring.board.service;
 import java.sql.Date;
 import java.util.List;
 
-import com.spring.board.domain.LevelVO;
 import com.spring.board.domain.PointHistoryVO;
-import com.spring.board.domain.PointVO;
 import com.spring.board.domain.UserVO;
 
 public interface UserService {

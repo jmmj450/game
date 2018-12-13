@@ -46,5 +46,11 @@ public class LevelDAOImpl implements LevelDAO {
 	public LevelVO selectMyLevel(int point) throws Exception {
 		return session.selectOne(namespace+".selectMyLevel", point);
 	}
+
+	@Override
+	public int count() throws Exception {
+		return session.selectOne(namespace+".count");
+	}
+	
 	
 }

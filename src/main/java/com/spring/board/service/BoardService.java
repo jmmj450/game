@@ -32,4 +32,6 @@ public interface BoardService {
 	List<ReportVO> reportBoard(int startRow)throws Exception;
 	void ok(int bNum) throws Exception;
 	ReportVO reportdetail(int bNum) throws Exception;
+	
+	List<BoardVO> boardbest(BoardVO boardVO) throws Exception;
 }

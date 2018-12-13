@@ -7,25 +7,25 @@
 
 <div class="warp">
 	<c:choose>
-		<c:when test="${boardVO.bigcategory eq  3001}">
+		<c:when test="${bigcategory eq  3001}">
 		<%@include file="../category/ps4.jsp" %>
 		</c:when>
-		<c:when test="${boardVO.bigcategory eq  3002}">
+		<c:when test="${bigcategory eq  3002}">
 		<%@include file="../category/psvita.jsp" %>
 		</c:when>
-		<c:when test="${boardVO.bigcategory eq  3003}">
+		<c:when test="${bigcategory eq  3003}">
 		<%@include file="../category/xbox.jsp" %>
 		</c:when>
-		<c:when test="${boardVO.bigcategory eq  3004}">
+		<c:when test="${bigcategory eq  3004}">
 		<%@include file="../category/switch.jsp" %>
 		</c:when>
-		<c:when test="${boardVO.bigcategory eq  3005}">
+		<c:when test="${bigcategory eq  3005}">
 		<%@include file="../category/3ds.jsp" %>
 		</c:when>
-		<c:when test="${boardVO.bigcategory eq  3006}">
+		<c:when test="${bigcategory eq  3006}">
 		<%@include file="../category/pc.jsp"%>
 		</c:when>
-		<c:when test="${boardVO.bigcategory eq  3007}">
+		<c:when test="${bigcategory eq  3007}">
 		<%@include file="../category/phone.jsp" %>
 		</c:when>
 	</c:choose>
@@ -61,8 +61,8 @@
 						<div class="upAndRead">
 							추천 <font style="color: red;">${boardVO.recommend }</font> <font style="color:gray;">|</font> 조회 ${boardVO.bReadCount }<br>
 						</div>
-						일시 2018.12.01 (23:46:42)<br>
-						IP : 2018.235.***.***
+						일시 <fmt:formatDate value="${boardVO.bWriteDate }" pattern="yyyy-MM-dd" /><br>
+						IP : ${boardVO.ip }
 					</div>
 				</div>
 				<div class="contentLine">
@@ -118,22 +118,24 @@
 			</div>
 		</div>
 		<div class="contentBottom">
-			<div class="bottomText"><font style="font-size: 18px;">덧글</font> <font style="color: gray; padding: 0px 5px 0px 10px;">|</font> 총 <font style="color: #1A70DC; font-weight: bold;">0</font>개</div>
+			<div class="bottomText"><font style="font-size: 18px;">덧글</font> <font style="color: gray; padding: 0px 5px 0px 10px;">|</font> 총 <font style="color: #1A70DC; font-weight: bold;">${recount }</font>개</div>
 			<div class="comment">
 				<div id="reply">
 					<c:forEach var="item" items="${list}" varStatus="loop">
 					<div class="commentContent rNumber">
 						<div class="commentContentName">
-							<%-- <c:when test="${item.userEmail eq null }">
+						<c:choose>
+							<c:when test="${item.userEmail eq null }">
 								<br>
 								<font style="color:#AAAAAA;">비회원</font><br>
 								<br>
 							</c:when>
-							<c:otherwise> --%>
+							<c:otherwise>
 								${item.userEmail}<br>
 								(userID)<br>
 								<font style="color:#AAAAAA;">(아이피)</font><br>
-							<%-- </c:otherwise> --%>
+							</c:otherwise>
+						</c:choose>
 						</div>
 						<input type="hidden" class="rNum" value="${item.rNum }">
 						<input type="hidden" class="rpass" value="${item.password  }">
@@ -204,7 +206,7 @@ function  redelete(){
 	
 	
 	if(password == ''){
-		location.href='/reply/delete?rNum='+rNum+'&bNum='+'${boardVO.bNum}'+'&page='+'${page}'; 
+		location.href='/reply/delete?rNum='+rNum+'&bNum='+'${boardVO.bNum}'+'&page='+'${page}'+'&bigcategory= '+'${boardVO.bigcategory}'+'&category='+'${boardVO.category}'; 
 		alert('삭제함');
 	}
 	
@@ -221,8 +223,8 @@ function  redelete(){
 		
 		if(password == inpassword || '${userAdmin}' == 1){
 			console.log(inpassword);
-			location.href='/reply/delete?rNum='+rNum+'&bNum='+'${boardVO.bNum}'+'&page='+'${page}'; 
-			alert('삭제함2');
+			location.href='/reply/delete?rNum='+rNum+'&bNum='+'${boardVO.bNum}'+'&page='+'${page}'+'&bigcategory= '+'${boardVO.bigcategory}'+'&category='+'${boardVO.category}'; 
+			alert('삭제함');
 		}else{
 			alert('비밀번호 틀림');
 			$(this).closest('div.rNumber').find('.rere').val('');
@@ -307,22 +309,41 @@ function  redelete(){
 				var userEmail = '${userEmail}';
 				
 				if('${userEmail}' != ''){
-					var str = ' <div class="rNumber"> <b>'+userEmail+'</b> <input type="hidden" class="rNum" value="'+rNum+'" > ' ; 
-						  str += '<input type="hidden" class="rpass" value="">'	;
-						  str +=	'<a href="javascript:void(0);" class="replyDelete"> <i class="material-icons">cancel</i> </a> <br>'+rContent+'<hr> </div>';  
+// 						str = ' <div class="rNumber"> <b>'+userEmail+'</b> <input type="hidden" class="rNum" value="'+rNum+'" > ' ; 
+// 						  str += '<input type="hidden" class="rpass" value="">'	;
+// 						  str +=	'<a href="javascript:void(0);" class="replyDelete"> <i class="material-icons">cancel</i> </a> <br>'+rContent+'<hr> </div>';  
+						  
+						  str = ' <div class="commentContent rNumber"> <div class="commentContentName">'+userEmail+'<br>(userID)<br> <font style="color:#AAAAAA;">(아이피)</font><br> </div>'
+							 str += '<input type="hidden" class="rNum" value="'+rNum+'"> <input type="hidden" class="rpass" value="">'
+							 str += '<div class="commentContentText">'+rContent+'</div>'
+							 str +='<div class="commentDelete"> <a href="javascript:void(0);" class="replyDelete"> <i class="material-icons">cancel</i> </a> </div> </div>' 
 					}
 				
 				if('${userEmail}' == ''){
-				var str = ' <div class="rNumber"> <input type="hidden" class="rNum" value="'+rNum+'" >'; 
-					str +='<input type="hidden" class="rpass" value="'+password+'"> ' ;  
-					str +='<input type="password"  class="rere form-control" maxlength="30" style="width: 300px; display: inline-block;" placeholder="Enter repassword">';
-				str += '<a href="javascript:void(0);" class="replyDelete"><i class="material-icons">cancel</i></a>';
-				str += '<br>';
-				str += rContent;
-				str += '<hr> </div>';
+// 				  str = ' <div class="rNumber"> <input type="hidden" class="rNum" value="'+rNum+'" >'; 
+// 					str +='<input type="hidden" class="rpass" value="'+password+'"> ' ;  
+// 					str +='<input type="password"  class="rere form-control" maxlength="30" style="width: 300px; display: inline-block;" placeholder="Enter repassword">';
+// 				str += '<a href="javascript:void(0);" class="replyDelete"><i class="material-icons">cancel</i></a>';
+// 				str += '<br>';
+// 				str += rContent;
+// 				str += '<hr> </div>';
 				
+				str = ' <div class="commentContent rNumber"> <div class="commentContentName"> <br> <font style="color:#AAAAAA;">비회원</font><br> <br></div>';
+				 str += '<input type="hidden" class="rNum" value="'+rNum+'"> <input type="hidden" class="rpass" value="'+password+'">';
+				 str += '<div class="commentContentText">'+rContent+'</div>';
+				 str +=' <div class="commentDelete"> <input type="password"  class="rere" maxlength="30" style="width: 120px; display: inline-block;" placeholder="Enter repassword">';
+				str +='<a href="javascript:void(0);" class="replyDelete"><i class="material-icons">cancel</i></a> 	</div> </div>';
 				
 				}
+				
+				
+// 				str = '<div class="commentContentName">'+userEmail+'<br>(userID)<br> <font style="color:#AAAAAA;">(아이피)</font><br> </div>'
+// 				 str += '<input type="hidden" class="rNum" value="'+rNum+'"> <input type="hidden" class="rpass" value="'+password+'">'
+// 				 str += '<div class="commentContentText">'+rContent+'</div>'
+// 				 str +='<input type="password"  class="rere" maxlength="30" style="width: 120px; display: inline-block;" placeholder="Enter repassword">'
+// 				str +='<a href="javascript:void(0);" class="replyDelete"><i class="material-icons">cancel</i></a>'
+				
+				
 				
 				$('#reply').prepend(str);
 				rContent_textarea.value = '';
